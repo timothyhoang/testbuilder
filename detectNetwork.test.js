@@ -8,6 +8,7 @@
 // different value.
 var FILL_ME_IN = 'Fill this value in';
  
+ /*
 describe('Introduction to Mocha Tests - READ ME FIRST', function() {
   // A Mocha test is just a function!
   // If the function throws an error when run, it fails.
@@ -40,6 +41,7 @@ describe('Introduction to Mocha Tests - READ ME FIRST', function() {
     }
   });
 });
+*/
 describe('Diner\'s Club', function() {
   // Be careful, tests can have bugs too...
 
