@@ -7,44 +7,74 @@
 //   1. The first few numbers (called the prefix)
 //   2. The number of digits in the number (called the length)
 
-var isDinersClub = function(cardNumber) {
-  var prefix = cardNumber.slice(0, 2);
-  if (['38', '39'].includes(prefix) && cardNumber.length === 14) {
-    return 'Diner\'s Club';
+var getChinaUnionPayPrefixes = function() {
+  var prefixes = [];
+  for (var i = 622126; i <= 622925; i++) {
+    prefixes.push(i.toString());
   }
+  for (var i = 624; i <= 626; i++) {
+    prefixes.push(i.toString());
+  }
+  for (var i = 6282; i <= 6288; i++) {
+    prefixes.push(i.toString());
+  }
+  return prefixes;
 };
 
-var isAmericanExpress = function(cardNumber) {
-  var prefix = cardNumber.slice(0, 2);
-  if (['34', '37'].includes(prefix) && cardNumber.length === 15) {
-    return 'American Express';
+var networks = [
+  {
+    name: 'China UnionPay',
+    prefixes: getChinaUnionPayPrefixes(),
+    lengths: [16, 17, 18, 19]
+  },
+  {
+    name: 'Switch',
+    prefixes: ['4903', '4905', '4911', '4936', '564182', '633110', '6333', '6759'],
+    lengths: [16, 18, 19]
+  },
+  {
+    name: 'Diner\'s Club',
+    prefixes: ['38', '39'],
+    lengths: [14]
+  },
+  {
+    name: 'American Express',
+    prefixes: ['34', '37'],
+    lengths: [15]
+  },
+  {
+    name: 'Visa',
+    prefixes: ['4'],
+    lengths: [13, 16, 19]
+  },
+  {
+    name: 'MasterCard',
+    prefixes: ['51', '52', '53', '54', '55'],
+    lengths: [16]
+  },
+  {
+    name: 'Discover',
+    prefixes: ['6011', '644', '645', '646', '647', '648', '649', '65'],
+    lengths: [16, 19]
+  },
+  {
+    name: 'Maestro',
+    prefixes: ['5018', '5020', '5038', '6304'],
+    lengths: [12, 13, 14, 15, 16, 17, 18, 19]
   }
-};
-
-var isVisa = function(cardNumber) {
-  var prefix = cardNumber[0];
-  if (prefix === '4' && [13, 16, 19].includes(cardNumber.length)) {
-    return 'Visa';
-  }
-};
-
-var isMasterCard = function(cardNumber) {
-  var prefix = cardNumber.slice(0, 2);
-  if (['51', '52', '53', '54', '55'].includes(prefix) && cardNumber.length === 16) {
-    return 'MasterCard';
-  }
-};
+];
 
 var detectNetwork = function(cardNumber) {
   // Note: `cardNumber` will always be a string
-  // The Diner's Club network always starts with a 38 or 39 and is 14 digits long
-  // The American Express network always starts with a 34 or 37 and is 15 digits long
-  // Visa always has a prefix of 4 and a length of 13, 16, or 19.
-  // MasterCard always has a prefix of 51, 52, 53, 54, or 55 and a length of 16.
 
   // Once you've read this, go ahead and try to implement this function, then return to the console.
-  return isDinersClub(cardNumber) ||
-         isAmericanExpress(cardNumber) ||
-         isVisa(cardNumber) ||
-         isMasterCard(cardNumber);
+  for (var i = 0; i < networks.length; i++) {
+    var prefixes = networks[i].prefixes;
+    var lengths = networks[i].lengths;
+    for (var j = 0; j < prefixes.length; j++) {
+      if (prefixes[j] === cardNumber.slice(0, prefixes[j].length) && lengths.includes(cardNumber.length)) {
+        return networks[i].name;
+      }
+    }
+  }
 };
